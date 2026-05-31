@@ -1,358 +1,434 @@
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Cahier des charges — Site Auto</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--font-sans);font-size:15px;color:var(--color-text-primary)}
-:root{--blue:#185FA5;--blue-light:#E6F1FB;--green:#3B6D11;--green-light:#EAF3DE;--amber:#854F0B;--amber-light:#FAEEDA}
-.app{max-width:420px;margin:0 auto;padding:0 0 80px}
-.header{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);padding:14px 16px;position:sticky;top:0;z-index:100}
+:root{
+  --bg:#0f1117;
+  --bg-card:#1a1d27;
+  --bg-input:#13161f;
+  --bg-hover:#1f2335;
+  --bg-active:#252840;
+  --border:#2a2e42;
+  --border-focus:#4a6cf7;
+  --text:#e8eaf0;
+  --text-muted:#7b82a0;
+  --text-hint:#4a5070;
+  --accent:#4a6cf7;
+  --accent-light:rgba(74,108,247,0.15);
+  --accent-border:rgba(74,108,247,0.4);
+  --green:#2ecc71;
+  --green-light:rgba(46,204,113,0.12);
+  --amber:#f0a500;
+  --amber-light:rgba(240,165,0,0.12);
+  --red:#e74c3c;
+  --radius:10px;
+  --radius-sm:7px;
+}
+html,body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:15px;min-height:100vh}
+.app{max-width:460px;margin:0 auto;padding:0 0 90px}
+
+/* HEADER */
+.header{background:rgba(15,17,23,0.95);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 16px;position:sticky;top:0;z-index:100}
 .header-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.header-title{font-size:16px;font-weight:500}
-.header-sub{font-size:12px;color:var(--color-text-secondary)}
-.progress-bar{height:4px;background:var(--color-background-secondary);border-radius:2px;overflow:hidden}
-.progress-fill{height:100%;background:var(--blue);transition:width 0.4s ease;border-radius:2px}
-.progress-label{font-size:11px;color:var(--color-text-secondary);margin-top:5px;text-align:right}
-.section{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin:12px;overflow:hidden;background:var(--color-background-primary)}
-.section-header{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
-.section-header:active{background:var(--color-background-secondary)}
-.section-icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:var(--blue-light);color:var(--blue)}
-.section-meta{flex:1;margin:0 12px}
-.section-name{font-size:14px;font-weight:500}
-.section-count{font-size:12px;color:var(--color-text-secondary);margin-top:1px}
-.chevron{font-size:18px;color:var(--color-text-secondary);transition:transform 0.25s}
+.header-brand{display:flex;align-items:center;gap:10px}
+.header-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+.header-title{font-size:16px;font-weight:600;letter-spacing:-0.3px}
+.header-sub{font-size:11px;color:var(--text-muted);margin-top:1px}
+.saved-badge{font-size:11px;color:var(--text-muted);background:var(--bg-card);border:1px solid var(--border);padding:3px 10px;border-radius:20px;white-space:nowrap}
+.progress-bar{height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#7c3aed);transition:width 0.4s ease;border-radius:2px}
+.progress-label{font-size:11px;color:var(--text-muted);margin-top:6px;display:flex;justify-content:space-between}
+.pct-badge{background:var(--accent-light);color:var(--accent);padding:2px 8px;border-radius:20px;font-weight:600}
+
+/* VIEW TOGGLE */
+.view-toggle{display:flex;margin:14px 14px 0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;padding:3px;gap:3px}
+.view-tab{flex:1;padding:9px;font-size:13px;font-weight:500;text-align:center;cursor:pointer;border:none;background:transparent;color:var(--text-muted);font-family:inherit;border-radius:calc(var(--radius) - 2px);transition:all 0.2s}
+.view-tab:active{transform:scale(0.97)}
+.view-tab.active{background:var(--accent);color:white}
+
+/* SECTIONS */
+.section{border:1px solid var(--border);border-radius:var(--radius);margin:12px 14px;overflow:hidden;background:var(--bg-card);transition:border-color 0.2s}
+.section.has-data{border-color:rgba(74,108,247,0.25)}
+.section-header{padding:14px 16px;display:flex;align-items:center;gap:12px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;transition:background 0.15s}
+.section-header:active{background:var(--bg-hover)}
+.section-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:var(--bg-input);color:var(--accent)}
+.section-meta{flex:1;min-width:0}
+.section-name{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.section-count{font-size:11px;color:var(--text-muted);margin-top:2px}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.3s}
+.status-dot.partial{background:var(--amber)}
+.status-dot.done{background:var(--green);box-shadow:0 0 6px rgba(46,204,113,0.4)}
+.chevron{font-size:13px;color:var(--text-hint);transition:transform 0.25s;flex-shrink:0}
 .chevron.open{transform:rotate(180deg)}
-.section-body{padding:0 16px 16px;border-top:0.5px solid var(--color-border-tertiary);display:none}
+.section-body{padding:0 16px 16px;border-top:1px solid var(--border);display:none}
 .section-body.open{display:block}
-.field{margin-top:14px}
-.field-label{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:6px;display:flex;align-items:center;gap:6px}
-.field-label i{font-size:15px;color:var(--color-text-secondary)}
-input[type=text],input[type=email],input[type=tel],textarea,select{width:100%;padding:10px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);font-size:14px;font-family:var(--font-sans);color:var(--color-text-primary);background:var(--color-background-primary);outline:none;resize:none}
-input[type=text]:focus,input[type=email]:focus,input[type=tel]:focus,textarea:focus,select:focus{border-color:var(--blue);box-shadow:0 0 0 2px rgba(24,95,165,0.15)}
-.check-grid{display:flex;flex-direction:column;gap:6px}
-.check-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background 0.15s}
-.check-item:active{background:var(--color-background-secondary)}
-.check-item.checked{background:var(--blue-light);border-color:rgba(24,95,165,0.4)}
-.check-item input[type=checkbox]{display:none}
-.check-box{width:18px;height:18px;border:1.5px solid var(--color-border-secondary);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--color-background-primary)}
-.check-item.checked .check-box{background:var(--blue);border-color:var(--blue)}
-.check-box i{font-size:12px;color:white;display:none}
-.check-item.checked .check-box i{display:flex}
-.check-label{font-size:13px;flex:1}
+
+/* FIELDS */
+.field{margin-top:16px}
+.field-label{font-size:12px;font-weight:500;color:var(--text-muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px}
+input[type=text],input[type=email],input[type=tel],textarea,select{
+  width:100%;padding:11px 13px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  font-size:14px;font-family:inherit;
+  color:var(--text);
+  background:var(--bg-input);
+  outline:none;resize:vertical;
+  transition:border-color 0.2s,box-shadow 0.2s;
+  -webkit-appearance:none;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+input::placeholder,textarea::placeholder{color:var(--text-hint)}
+textarea{min-height:80px}
+
+/* RADIO */
 .radio-grid{display:flex;flex-direction:column;gap:6px}
-.radio-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background 0.15s}
-.radio-item:active{background:var(--color-background-secondary)}
-.radio-item.selected{background:var(--blue-light);border-color:rgba(24,95,165,0.4)}
-.radio-dot{width:18px;height:18px;border:1.5px solid var(--color-border-secondary);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:var(--color-background-primary)}
-.radio-item.selected .radio-dot{border-color:var(--blue)}
-.radio-dot::after{content:'';width:8px;height:8px;border-radius:50%;background:var(--blue);display:none}
-.radio-item.selected .radio-dot::after{display:block}
-.radio-label{font-size:13px;flex:1}
-.section-status{width:8px;height:8px;border-radius:50%;background:var(--color-border-secondary);flex-shrink:0}
-.section-status.done{background:#3B6D11}
-.section-status.partial{background:#BA7517}
-.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:var(--color-background-primary);border-top:0.5px solid var(--color-border-tertiary);padding:12px 16px;display:flex;gap:10px;z-index:100}
-.btn{flex:1;padding:11px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);font-size:13px;font-weight:500;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary);font-family:var(--font-sans);-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;gap:6px;transition:background 0.15s}
-.btn:active{background:var(--color-background-secondary);transform:scale(0.98)}
-.btn-primary{background:var(--blue);color:white;border-color:var(--blue)}
-.btn-primary:active{background:#0C447C}
-.btn-success{background:#3B6D11;color:white;border-color:#3B6D11}
-.btn-success:active{background:#27500A}
-.saved-toast{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#3B6D11;color:white;padding:8px 18px;border-radius:var(--border-radius-md);font-size:13px;z-index:200;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
-.saved-toast.show{opacity:1}
-.summary-view{display:none;padding:12px}
-.summary-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:12px}
-.summary-section-title{padding:12px 16px;background:var(--blue-light);font-size:13px;font-weight:500;color:var(--blue);border-bottom:0.5px solid var(--color-border-tertiary)}
-.summary-row{padding:9px 16px;display:flex;gap:8px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.radio-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.15s;background:var(--bg-input)}
+.radio-item:active{background:var(--bg-hover);transform:scale(0.99)}
+.radio-item.selected{background:var(--accent-light);border-color:var(--accent-border)}
+.radio-dot{width:18px;height:18px;border:2px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color 0.2s}
+.radio-item.selected .radio-dot{border-color:var(--accent)}
+.radio-inner{width:8px;height:8px;border-radius:50%;background:var(--accent);display:none}
+.radio-item.selected .radio-inner{display:block}
+.radio-label{font-size:14px}
+
+/* CHECKBOX */
+.check-grid{display:flex;flex-direction:column;gap:6px}
+.check-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all 0.15s;background:var(--bg-input)}
+.check-item:active{background:var(--bg-hover);transform:scale(0.99)}
+.check-item.checked{background:var(--accent-light);border-color:var(--accent-border)}
+.check-box{width:18px;height:18px;border:2px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.2s;background:var(--bg-input)}
+.check-item.checked .check-box{background:var(--accent);border-color:var(--accent)}
+.check-mark{display:none;font-size:11px;color:white;font-weight:700}
+.check-item.checked .check-mark{display:block}
+.check-label{font-size:14px}
+
+/* BOTTOM BAR */
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(15,17,23,0.97);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:12px 14px;display:flex;gap:8px;z-index:100}
+.btn{flex:1;padding:12px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:13px;font-weight:500;cursor:pointer;background:var(--bg-card);color:var(--text);font-family:inherit;-webkit-tap-highlight-color:transparent;display:flex;align-items:center;justify-content:center;gap:7px;transition:all 0.15s}
+.btn:active{transform:scale(0.97)}
+.btn-save{border-color:rgba(46,204,113,0.3);color:var(--green)}
+.btn-save:active{background:var(--green-light)}
+.btn-reset{flex:0 0 auto;width:46px;padding:12px 0;color:var(--text-muted)}
+.btn-export{background:var(--accent);color:white;border-color:var(--accent);flex:1.3}
+.btn-export:active{background:#3a5ce0}
+
+/* TOAST */
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:9px 20px;border-radius:20px;font-size:13px;font-weight:500;z-index:300;opacity:0;transition:opacity 0.3s,transform 0.3s;pointer-events:none;white-space:nowrap;transform:translateX(-50%) translateY(-6px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* SUMMARY */
+.summary-view{display:none;padding:14px}
+.summary-header{font-size:13px;font-weight:500;color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.summary-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:10px}
+.summary-sec-title{padding:10px 14px;background:var(--bg-active);font-size:12px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:0.5px;border-bottom:1px solid var(--border)}
+.summary-row{padding:9px 14px;display:flex;gap:8px;border-bottom:1px solid var(--border);font-size:13px}
 .summary-row:last-child{border-bottom:none}
-.summary-key{color:var(--color-text-secondary);flex-shrink:0;width:45%}
-.summary-val{color:var(--color-text-primary);font-weight:500;word-break:break-word}
-.view-toggle{display:flex;margin:12px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
-.view-tab{flex:1;padding:9px;font-size:13px;text-align:center;cursor:pointer;border:none;background:var(--color-background-primary);color:var(--color-text-secondary);font-family:var(--font-sans);-webkit-tap-highlight-color:transparent}
-.view-tab.active{background:var(--blue);color:white;font-weight:500}
+.summary-key{color:var(--text-muted);flex:0 0 42%;font-size:12px}
+.summary-val{color:var(--text);font-weight:500;word-break:break-word;line-height:1.5}
+.empty-state{text-align:center;padding:40px 20px;color:var(--text-muted)}
+.empty-state-icon{font-size:40px;margin-bottom:12px;opacity:0.3}
+.generate-btn{width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:4px;margin-bottom:20px;display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent}
+.generate-btn:active{background:#3a5ce0;transform:scale(0.99)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 </style>
-<h2 class="sr-only">Formulaire Cahier des charges — site web automobile</h2>
+</head>
+<body>
 
 <div class="header">
   <div class="header-top">
-    <div>
-      <div class="header-title">Cahier des charges</div>
-      <div class="header-sub">Site web automobile</div>
+    <div class="header-brand">
+      <div class="header-dot"></div>
+      <div>
+        <div class="header-title">Cahier des charges</div>
+        <div class="header-sub">Site web automobile</div>
+      </div>
     </div>
-    <div id="saved-indicator" style="font-size:11px;color:var(--color-text-secondary)">— non enregistré</div>
+    <div class="saved-badge" id="saved-badge">Non sauvegardé</div>
   </div>
   <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-  <div class="progress-label"><span id="progress-text">0 / 17 sections remplies</span></div>
+  <div class="progress-label">
+    <span id="progress-text">0 / 17 sections remplies</span>
+    <span class="pct-badge" id="pct-badge">0%</span>
+  </div>
 </div>
 
 <div class="view-toggle">
-  <button class="view-tab active" id="tab-form" onclick="switchView('form')"><i class="ti ti-forms" aria-hidden="true"></i> Formulaire</button>
-  <button class="view-tab" id="tab-summary" onclick="switchView('summary')"><i class="ti ti-list-details" aria-hidden="true"></i> Résumé</button>
+  <button class="view-tab active" id="tab-form" onclick="switchView('form')">&#9998; Formulaire</button>
+  <button class="view-tab" id="tab-summary" onclick="switchView('summary')">&#9776; Résumé</button>
 </div>
 
 <div id="form-view" class="app"></div>
 <div id="summary-view" class="summary-view"></div>
 
-<div class="saved-toast" id="toast">Enregistré</div>
+<div class="toast" id="toast">&#10003; Sauvegardé</div>
 
 <div class="bottom-bar">
-  <button class="btn" onclick="saveData()"><i class="ti ti-device-floppy" aria-hidden="true"></i> Sauvegarder</button>
-  <button class="btn" onclick="clearAll()" style="flex:0.5;padding:11px 8px"><i class="ti ti-refresh" aria-hidden="true"></i></button>
-  <button class="btn btn-primary" onclick="exportPDF()"><i class="ti ti-file-download" aria-hidden="true"></i> Export PDF</button>
+  <button class="btn btn-save" onclick="saveData()">&#128190; Sauvegarder</button>
+  <button class="btn btn-reset" onclick="clearAll()" title="Réinitialiser">&#8635;</button>
+  <button class="btn btn-export" onclick="exportPDF()">&#8659; Export PDF</button>
 </div>
 
 <script>
-const SECTIONS = [
-{id:'s1',icon:'ti-building',title:'Informations générales',fields:[
+const SECTIONS=[
+{id:'s1',icon:'🏢',title:'Informations générales',fields:[
   {id:'company_name',label:'Nom de l\'entreprise',type:'text',placeholder:'Ex: Auto Premium Marseille'},
   {id:'contact_name',label:'Nom du responsable',type:'text',placeholder:'Prénom et nom'},
   {id:'contact_phone',label:'Téléphone',type:'tel',placeholder:'+33 6 00 00 00 00'},
   {id:'contact_email',label:'E-mail',type:'text',placeholder:'contact@entreprise.fr'},
-  {id:'address',label:'Adresse',type:'text',placeholder:'Rue, ville, code postal'},
+  {id:'address',label:'Adresse complète',type:'text',placeholder:'Rue, ville, code postal'},
 ]},
-{id:'s2',icon:'ti-car',title:'Activité principale',fields:[
+{id:'s2',icon:'🚗',title:'Activité principale',fields:[
   {id:'activity',label:'Type d\'activité',type:'radio',options:['Vente de voitures','Location de voitures','Vente + Location','Autre activité']},
-  {id:'activity_other',label:'Préciser si autre',type:'text',placeholder:'Décrire l\'activité...'},
+  {id:'activity_other',label:'Préciser si autre activité',type:'text',placeholder:'Décrire l\'activité...'},
 ]},
-{id:'s3',icon:'ti-world',title:'Présence actuelle',fields:[
+{id:'s3',icon:'🌐',title:'Présence actuelle en ligne',fields:[
   {id:'has_site',label:'Avez-vous déjà un site web ?',type:'radio',options:['Oui','Non']},
-  {id:'site_url',label:'Si oui, l\'URL du site',type:'text',placeholder:'https://www.monsite.fr'},
+  {id:'site_url',label:'Si oui — URL du site actuel',type:'text',placeholder:'https://www.monsite.fr'},
   {id:'has_logo',label:'Avez-vous un logo ?',type:'radio',options:['Oui','Non','À créer']},
   {id:'has_charte',label:'Avez-vous une charte graphique ?',type:'radio',options:['Oui','Non']},
   {id:'has_photos',label:'Avez-vous des photos des véhicules ?',type:'radio',options:['Oui','Non','Partiellement']},
   {id:'has_domain',label:'Avez-vous un nom de domaine ?',type:'radio',options:['Oui','Non']},
-  {id:'domain_name',label:'Si oui, le nom de domaine',type:'text',placeholder:'monentreprise.fr'},
+  {id:'domain_name',label:'Si oui — nom de domaine',type:'text',placeholder:'monentreprise.fr'},
 ]},
-{id:'s4',icon:'ti-target',title:'Objectif du site',fields:[
-  {id:'goals',label:'Objectifs principaux (cochez tout ce qui s\'applique)',type:'checkbox',options:['Présenter l\'entreprise','Présenter les véhicules','Recevoir des demandes de contact','Recevoir des demandes de réservation','Permettre aux clients de consulter le stock','Augmenter la visibilité de l\'entreprise','Trouver de nouveaux clients']},
-  {id:'goals_other',label:'Autre objectif',type:'text',placeholder:'Précisez...'},
+{id:'s4',icon:'🎯',title:'Objectifs du site',fields:[
+  {id:'goals',label:'Objectifs principaux',type:'checkbox',options:['Présenter l\'entreprise','Présenter les véhicules','Recevoir des demandes de contact','Recevoir des demandes de réservation','Permettre aux clients de consulter le stock','Augmenter la visibilité de l\'entreprise','Trouver de nouveaux clients']},
+  {id:'goals_other',label:'Autre objectif à préciser',type:'text',placeholder:'Précisez...'},
 ]},
-{id:'s5',icon:'ti-users',title:'Public cible',fields:[
+{id:'s5',icon:'👥',title:'Public cible',fields:[
   {id:'client_type',label:'Vos clients sont',type:'radio',options:['Particuliers','Professionnels','Les deux']},
   {id:'geo_zone',label:'Zone géographique couverte',type:'radio',options:['Ville uniquement','Région','Toute la France','International']},
-  {id:'geo_cities',label:'Villes / zones ciblées',type:'text',placeholder:'Ex: Paris, Bordeaux, Lyon...'},
+  {id:'geo_cities',label:'Villes ou zones ciblées',type:'text',placeholder:'Ex: Paris, Bordeaux, Lyon...'},
 ]},
-{id:'s6',icon:'ti-layout-2',title:'Structure du site (pages)',fields:[
+{id:'s6',icon:'📄',title:'Structure du site (pages)',fields:[
   {id:'pages',label:'Pages souhaitées',type:'checkbox',options:['Accueil','À propos','Nos véhicules','Détail véhicule','Vente de véhicules','Location de véhicules','Contact','FAQ','Témoignages','Blog / Actualités','Galerie photos','Mentions légales','Politique de confidentialité']},
   {id:'pages_other',label:'Autres pages',type:'text',placeholder:'Précisez...'},
 ]},
-{id:'s7',icon:'ti-car-suv',title:'Gestion des véhicules',fields:[
+{id:'s7',icon:'🚘',title:'Fiche véhicule — informations',fields:[
   {id:'vehicle_info',label:'Informations à afficher par véhicule',type:'checkbox',options:['Marque','Modèle','Année','Kilométrage','Carburant','Boîte de vitesse','Couleur','Prix','Disponibilité','Description','Photos','Vidéos','Localisation','État du véhicule']},
-  {id:'vehicle_other',label:'Autres informations',type:'text',placeholder:'Précisez...'},
+  {id:'vehicle_other',label:'Autres informations à afficher',type:'text',placeholder:'Précisez...'},
 ]},
-{id:'s8',icon:'ti-tag',title:'Vente de véhicules',fields:[
+{id:'s8',icon:'💰',title:'Vente de véhicules',fields:[
   {id:'sell_request',label:'Le client peut envoyer une demande d\'achat ?',type:'radio',options:['Oui','Non']},
   {id:'sell_reserve',label:'Le client peut réserver un véhicule ?',type:'radio',options:['Oui','Non']},
-  {id:'sell_price_shown',label:'Le prix doit-il être affiché ?',type:'radio',options:['Toujours','Jamais','Selon le véhicule']},
+  {id:'sell_price_shown',label:'Affichage du prix',type:'radio',options:['Toujours affiché','Jamais affiché','Selon le véhicule']},
 ]},
-{id:'s9',icon:'ti-key',title:'Location de véhicules',fields:[
-  {id:'rent_online',label:'Réservation en ligne possible ?',type:'radio',options:['Oui','Non','Demande seulement']},
+{id:'s9',icon:'🔑',title:'Location de véhicules',fields:[
+  {id:'rent_online',label:'Réservation en ligne possible ?',type:'radio',options:['Oui, complète','Demande seulement','Non']},
   {id:'rent_dates',label:'Le client choisit les dates ?',type:'radio',options:['Oui','Non']},
   {id:'rent_time',label:'Le client choisit l\'heure ?',type:'radio',options:['Oui','Non']},
   {id:'rent_pickup',label:'Choix du lieu de récupération ?',type:'radio',options:['Oui','Non']},
   {id:'rent_return',label:'Choix du lieu de retour ?',type:'radio',options:['Oui','Non']},
   {id:'rent_pricing',label:'Type de tarif',type:'checkbox',options:['Journalier','Hebdomadaire','Mensuel','Forfait weekend']},
 ]},
-{id:'s10',icon:'ti-user-circle',title:'Comptes utilisateurs',fields:[
+{id:'s10',icon:'👤',title:'Comptes utilisateurs',fields:[
   {id:'user_accounts',label:'Les visiteurs doivent-ils avoir un compte ?',type:'radio',options:['Non','Oui, optionnel','Oui, obligatoire']},
   {id:'user_features',label:'Fonctionnalités si compte requis',type:'checkbox',options:['Inscription','Connexion','Mot de passe oublié','Historique des réservations','Profil utilisateur']},
 ]},
-{id:'s11',icon:'ti-dashboard',title:'Administration',fields:[
+{id:'s11',icon:'⚙️',title:'Administration / Back-office',fields:[
   {id:'admin_self',label:'Vous gérez le site vous-même ?',type:'radio',options:['Oui','Non','Partiellement']},
   {id:'admin_features',label:'Fonctionnalités du tableau de bord',type:'checkbox',options:['Ajouter un véhicule','Modifier un véhicule','Supprimer un véhicule','Gérer les réservations','Gérer les utilisateurs','Voir les statistiques','Recevoir les messages de contact','Gérer les photos']},
 ]},
-{id:'s12',icon:'ti-mail',title:'Contact',fields:[
+{id:'s12',icon:'✉️',title:'Contact et canaux',fields:[
   {id:'contact_fields',label:'Champs du formulaire de contact',type:'checkbox',options:['Nom','Prénom','Téléphone','E-mail','Sujet','Message']},
   {id:'contact_channels',label:'Moyens de contact disponibles',type:'checkbox',options:['Téléphone','WhatsApp','Facebook','Instagram','Adresse physique','Google Maps']},
 ]},
-{id:'s13',icon:'ti-palette',title:'Design et style',fields:[
-  {id:'design_style',label:'Style souhaité',type:'checkbox',options:['Moderne','Professionnel','Luxe','Minimaliste','Sportif','Premium','Élégant']},
-  {id:'color_main',label:'Couleur principale',type:'text',placeholder:'Ex: bleu marine, noir...'},
-  {id:'color_second',label:'Couleur secondaire',type:'text',placeholder:'Ex: or, blanc, gris...'},
-  {id:'design_refs',label:'Sites web de référence (URLs)',type:'textarea',placeholder:'https://...\nhttps://...'},
+{id:'s13',icon:'🎨',title:'Design et identité visuelle',fields:[
+  {id:'design_style',label:'Style souhaité',type:'checkbox',options:['Moderne','Professionnel','Luxe','Minimaliste','Sportif','Premium','Élégant','Dynamique']},
+  {id:'color_main',label:'Couleur principale',type:'text',placeholder:'Ex: bleu marine, noir, rouge...'},
+  {id:'color_second',label:'Couleur secondaire',type:'text',placeholder:'Ex: or, blanc, gris argent...'},
+  {id:'design_refs',label:'Sites de référence (URLs)',type:'textarea',placeholder:'https://...\nhttps://...'},
 ]},
-{id:'s14',icon:'ti-file-text',title:'Contenu du site',fields:[
+{id:'s14',icon:'📝',title:'Contenu du site',fields:[
   {id:'content_text',label:'Qui fournit les textes ?',type:'radio',options:['Le client','Vous (développeur)','À rédiger ensemble']},
   {id:'content_photos',label:'Qui fournit les photos ?',type:'radio',options:['Le client','Vous (développeur)','Banque d\'images']},
-  {id:'content_logo',label:'Qui fournit le logo ?',type:'radio',options:['Le client','À créer','Pas de logo']},
+  {id:'content_logo',label:'Logo',type:'radio',options:['Fourni par le client','À créer','Pas de logo']},
 ]},
-{id:'s15',icon:'ti-search',title:'Référencement SEO',fields:[
-  {id:'seo_needed',label:'Souhaitez-vous apparaître sur Google ?',type:'radio',options:['Oui, c\'est important','Oui, basique','Non']},
-  {id:'seo_cities',label:'Villes à cibler pour le SEO',type:'text',placeholder:'Ex: Lyon, Villeurbanne...'},
-  {id:'seo_keywords',label:'Mots-clés importants',type:'textarea',placeholder:'Ex: achat voiture occasion Lyon, location SUV...'},
+{id:'s15',icon:'🔍',title:'Référencement SEO',fields:[
+  {id:'seo_needed',label:'Souhaitez-vous apparaître sur Google ?',type:'radio',options:['Oui, c\'est prioritaire','Oui, basique','Non pour l\'instant']},
+  {id:'seo_cities',label:'Villes à cibler pour le SEO',type:'text',placeholder:'Ex: Lyon, Villeurbanne, Bron...'},
+  {id:'seo_keywords',label:'Mots-clés importants',type:'textarea',placeholder:'Ex: achat voiture occasion Lyon\nlocation SUV pas cher\n...'},
 ]},
-{id:'s16',icon:'ti-language',title:'Langues du site',fields:[
+{id:'s16',icon:'🌍',title:'Langues du site',fields:[
   {id:'languages',label:'Langues souhaitées',type:'checkbox',options:['Français','Arabe','Anglais','Espagnol','Autre']},
-  {id:'lang_other',label:'Autre langue',type:'text',placeholder:'Précisez...'},
+  {id:'lang_other',label:'Autre langue à préciser',type:'text',placeholder:'Précisez...'},
 ]},
-{id:'s17',icon:'ti-server',title:'Hébergement et domaine',fields:[
+{id:'s17',icon:'🖥️',title:'Hébergement, budget et priorités',fields:[
   {id:'hosting_has',label:'Avez-vous déjà un hébergement ?',type:'radio',options:['Oui','Non']},
   {id:'hosting_who',label:'Qui s\'occupe de l\'hébergement ?',type:'radio',options:['Le client','Vous (développeur)','À décider']},
   {id:'priorities',label:'Les 3 fonctionnalités les plus importantes',type:'textarea',placeholder:'1. ...\n2. ...\n3. ...'},
-  {id:'future_features',label:'Fonctionnalités futures envisagées',type:'checkbox',options:['Paiement en ligne','Application mobile','Signature électronique','Gestion de contrats','Facturation','Notifications SMS','Notifications e-mail']},
-  {id:'budget',label:'Budget estimé',type:'text',placeholder:'Ex: 1500€, À définir...'},
+  {id:'future_features',label:'Fonctionnalités futures envisagées',type:'checkbox',options:['Paiement en ligne','Application mobile','Signature électronique','Gestion de contrats','Facturation automatique','Notifications SMS','Notifications e-mail','Chat en direct']},
+  {id:'budget',label:'Budget estimé',type:'text',placeholder:'Ex: 1500€, 2000-3000€, À définir...'},
   {id:'deadline',label:'Délai souhaité',type:'text',placeholder:'Ex: 2 mois, avant le 01/03/2025...'},
-  {id:'notes',label:'Remarques ou informations complémentaires',type:'textarea',placeholder:'Tout ce qui n\'a pas été couvert...'},
+  {id:'notes',label:'Remarques complémentaires',type:'textarea',placeholder:'Tout ce qui n\'a pas été abordé...'},
 ]},
 ];
 
-let formData = {};
+let formData={};
 
-function loadFromStorage(){
-  try{
-    const saved = localStorage.getItem('cahier_charges_v2');
-    if(saved){formData=JSON.parse(saved);return true;}
-  }catch(e){}
+function load(){
+  try{const s=localStorage.getItem('cdc_auto_v3');if(s){formData=JSON.parse(s);return true;}}catch(e){}
   return false;
 }
 
 function saveData(){
   try{
-    localStorage.setItem('cahier_charges_v2',JSON.stringify(formData));
-    const d = new Date();
-    document.getElementById('saved-indicator').textContent = 'Sauvegardé '+d.getHours()+':'+String(d.getMinutes()).padStart(2,'0');
-    const t = document.getElementById('toast');
+    localStorage.setItem('cdc_auto_v3',JSON.stringify(formData));
+    const d=new Date();
+    document.getElementById('saved-badge').textContent='Sauvegardé '+pad(d.getHours())+':'+pad(d.getMinutes());
+    const t=document.getElementById('toast');
     t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2000);
-  }catch(e){alert('Erreur de sauvegarde (mode privé ?)');}
+    setTimeout(()=>t.classList.remove('show'),2200);
+  }catch(e){alert('Erreur de sauvegarde.');}
 }
+function pad(n){return String(n).padStart(2,'0');}
 
 function clearAll(){
   if(!confirm('Effacer toutes les réponses ?'))return;
   formData={};
-  localStorage.removeItem('cahier_charges_v2');
+  try{localStorage.removeItem('cdc_auto_v3');}catch(e){}
   renderForm();
   updateProgress();
+  document.getElementById('saved-badge').textContent='Réinitialisé';
 }
 
-function getValue(id){return formData[id]||'';}
-function setValue(id,val){formData[id]=val;autoSave();updateProgress();}
+function get(id){return formData[id]||'';}
+function set(id,val){formData[id]=val;autoSave();}
 
-let autoSaveTimer;
-function autoSave(){
-  clearTimeout(autoSaveTimer);
-  autoSaveTimer=setTimeout(saveData,1500);
-}
+let timer;
+function autoSave(){clearTimeout(timer);timer=setTimeout(saveData,1800);}
 
 function renderForm(){
-  const app = document.getElementById('form-view');
+  const app=document.getElementById('form-view');
   app.innerHTML='';
   SECTIONS.forEach((sec,si)=>{
-    const div=document.createElement('div');
-    div.className='section';
-    div.id='section-'+sec.id;
-    const filled=getSectionFill(sec);
-    const statusClass=filled===0?'':'filled===sec.fields.length?done:partial';
-    let realStatus='';
-    if(filled>0&&filled<sec.fields.length)realStatus='partial';
-    else if(filled===sec.fields.length&&filled>0)realStatus='done';
-    div.innerHTML=`
-      <div class="section-header" onclick="toggleSection('${sec.id}')">
-        <div class="section-icon"><i class="ti ${sec.icon}" aria-hidden="true"></i></div>
+    const wrap=document.createElement('div');
+    wrap.className='section';
+    wrap.id='sec-'+sec.id;
+    const filled=getFill(sec);
+    let sClass='';
+    if(filled>0&&filled<sec.fields.length)sClass='partial';
+    else if(filled>0)sClass='done';
+    wrap.innerHTML=`
+      <div class="section-header" onclick="toggle('${sec.id}')">
+        <div class="section-icon">${sec.icon}</div>
         <div class="section-meta">
           <div class="section-name">${si+1}. ${sec.title}</div>
           <div class="section-count">${sec.fields.length} champ${sec.fields.length>1?'s':''}</div>
         </div>
-        <div class="section-status ${realStatus}" id="status-${sec.id}"></div>
-        <i class="ti ti-chevron-down chevron" id="chevron-${sec.id}" aria-hidden="true"></i>
+        <div class="status-dot ${sClass}" id="dot-${sec.id}"></div>
+        <span class="chevron" id="chev-${sec.id}">&#9660;</span>
       </div>
       <div class="section-body" id="body-${sec.id}"></div>
     `;
-    app.appendChild(div);
-    renderFields(sec);
+    if(filled>0)wrap.classList.add('has-data');
+    app.appendChild(wrap);
+    buildFields(sec);
   });
 }
 
-function renderFields(sec){
+function buildFields(sec){
   const body=document.getElementById('body-'+sec.id);
   body.innerHTML='';
   sec.fields.forEach(f=>{
     const fd=document.createElement('div');
     fd.className='field';
     fd.innerHTML='<div class="field-label">'+f.label+'</div>';
-    if(f.type==='text'||f.type==='email'||f.type==='tel'){
+    if(f.type==='text'||f.type==='tel'){
       const inp=document.createElement('input');
-      inp.type=f.type==='tel'?'tel':'text';
+      inp.type=f.type;
       inp.placeholder=f.placeholder||'';
-      inp.value=getValue(f.id);
-      inp.oninput=e=>{setValue(f.id,e.target.value);updateSectionStatus(sec.id);};
+      inp.value=get(f.id);
+      inp.oninput=e=>{set(f.id,e.target.value);updateDot(sec.id);};
       fd.appendChild(inp);
     } else if(f.type==='textarea'){
       const ta=document.createElement('textarea');
-      ta.rows=3;ta.placeholder=f.placeholder||'';ta.value=getValue(f.id);
-      ta.oninput=e=>{setValue(f.id,e.target.value);updateSectionStatus(sec.id);};
+      ta.rows=3;ta.placeholder=f.placeholder||'';ta.value=get(f.id);
+      ta.oninput=e=>{set(f.id,e.target.value);updateDot(sec.id);};
       fd.appendChild(ta);
     } else if(f.type==='radio'){
-      const grid=document.createElement('div');grid.className='radio-grid';
+      const g=document.createElement('div');g.className='radio-grid';
       f.options.forEach(opt=>{
         const item=document.createElement('div');
-        item.className='radio-item'+(getValue(f.id)===opt?' selected':'');
-        item.innerHTML=`<div class="radio-dot"></div><span class="radio-label">${opt}</span>`;
+        item.className='radio-item'+(get(f.id)===opt?' selected':'');
+        item.innerHTML=`<div class="radio-dot"><div class="radio-inner"></div></div><span class="radio-label">${opt}</span>`;
         item.onclick=()=>{
-          setValue(f.id,opt);
-          grid.querySelectorAll('.radio-item').forEach(i=>i.classList.remove('selected'));
+          set(f.id,opt);
+          g.querySelectorAll('.radio-item').forEach(i=>i.classList.remove('selected'));
           item.classList.add('selected');
-          updateSectionStatus(sec.id);
+          updateDot(sec.id);
         };
-        grid.appendChild(item);
+        g.appendChild(item);
       });
-      fd.appendChild(grid);
+      fd.appendChild(g);
     } else if(f.type==='checkbox'){
-      const grid=document.createElement('div');grid.className='check-grid';
-      const stored=getValue(f.id);
-      const arr=Array.isArray(stored)?stored:(stored?[stored]:[]);
+      const g=document.createElement('div');g.className='check-grid';
+      const arr=getArr(f.id);
       f.options.forEach(opt=>{
         const item=document.createElement('div');
         item.className='check-item'+(arr.includes(opt)?' checked':'');
-        item.innerHTML=`<div class="check-box"><i class="ti ti-check" aria-hidden="true"></i></div><span class="check-label">${opt}</span>`;
+        item.innerHTML=`<div class="check-box"><span class="check-mark">&#10003;</span></div><span class="check-label">${opt}</span>`;
         item.onclick=()=>{
-          let cur=Array.isArray(getValue(f.id))?[...getValue(f.id)]:[];
+          let cur=getArr(f.id);
           if(cur.includes(opt))cur=cur.filter(x=>x!==opt);else cur.push(opt);
-          setValue(f.id,cur);
+          set(f.id,cur);
           item.classList.toggle('checked');
-          updateSectionStatus(sec.id);
+          updateDot(sec.id);
         };
-        grid.appendChild(item);
+        g.appendChild(item);
       });
-      fd.appendChild(grid);
+      fd.appendChild(g);
     }
     body.appendChild(fd);
   });
 }
 
-function toggleSection(id){
-  const body=document.getElementById('body-'+id);
-  const chev=document.getElementById('chevron-'+id);
-  const isOpen=body.classList.contains('open');
-  body.classList.toggle('open');
-  chev.classList.toggle('open');
+function getArr(id){const v=get(id);return Array.isArray(v)?v:(v?[v]:[]);}
+
+function toggle(id){
+  const b=document.getElementById('body-'+id);
+  const c=document.getElementById('chev-'+id);
+  b.classList.toggle('open');
+  c.classList.toggle('open');
 }
 
-function getSectionFill(sec){
-  let count=0;
+function getFill(sec){
+  let n=0;
   sec.fields.forEach(f=>{
-    const v=getValue(f.id);
-    if(Array.isArray(v)&&v.length>0)count++;
-    else if(typeof v==='string'&&v.trim())count++;
+    const v=get(f.id);
+    if(Array.isArray(v)&&v.length>0)n++;
+    else if(typeof v==='string'&&v.trim())n++;
   });
-  return count;
+  return n;
 }
 
-function updateSectionStatus(secId){
+function updateDot(secId){
   const sec=SECTIONS.find(s=>s.id===secId);
-  const filled=getSectionFill(sec);
-  const el=document.getElementById('status-'+secId);
+  const f=getFill(sec);
+  const el=document.getElementById('dot-'+secId);
+  const wrap=document.getElementById('sec-'+secId);
   if(!el)return;
-  el.className='section-status';
-  if(filled>0&&filled<sec.fields.length)el.classList.add('partial');
-  else if(filled>0)el.classList.add('done');
+  el.className='status-dot';
+  if(f>0&&f<sec.fields.length)el.classList.add('partial');
+  else if(f>0){el.classList.add('done');wrap.classList.add('has-data');}
   updateProgress();
 }
 
 function updateProgress(){
   let filled=0;
-  SECTIONS.forEach(s=>{if(getSectionFill(s)>0)filled++;});
+  SECTIONS.forEach(s=>{if(getFill(s)>0)filled++;});
   const pct=Math.round((filled/SECTIONS.length)*100);
   document.getElementById('progress-fill').style.width=pct+'%';
   document.getElementById('progress-text').textContent=filled+' / '+SECTIONS.length+' sections remplies';
+  document.getElementById('pct-badge').textContent=pct+'%';
 }
 
 function switchView(v){
@@ -363,82 +439,106 @@ function switchView(v){
   if(v==='summary')renderSummary();
 }
 
-function getDisplayVal(f){
-  const v=getValue(f.id);
-  if(!v||v==='')return '—';
-  if(Array.isArray(v))return v.length?v.join(', '):'—';
-  return v;
+function disp(f){
+  const v=get(f.id);
+  if(!v||v==='')return null;
+  if(Array.isArray(v))return v.length?v.join(', '):null;
+  return v.trim()||null;
 }
 
 function renderSummary(){
   const sv=document.getElementById('summary-view');
   sv.innerHTML='';
-  const company=getValue('company_name')||'Client';
+  const company=get('company_name')||'Client';
   const hd=document.createElement('div');
-  hd.style.cssText='padding:12px 4px 8px;font-size:15px;font-weight:500';
-  hd.textContent='Résumé — '+company;
+  hd.className='summary-header';
+  hd.innerHTML='&#128196; Résumé — <strong>'+company+'</strong>';
   sv.appendChild(hd);
+  let hasContent=false;
   SECTIONS.forEach(sec=>{
+    let rows='';
+    sec.fields.forEach(f=>{const v=disp(f);if(v)rows+=`<div class="summary-row"><span class="summary-key">${f.label}</span><span class="summary-val">${v}</span></div>`;});
+    if(!rows)return;
+    hasContent=true;
     const card=document.createElement('div');card.className='summary-card';
-    const title=document.createElement('div');title.className='summary-section-title';
-    title.textContent=sec.title;card.appendChild(title);
-    sec.fields.forEach(f=>{
-      const val=getDisplayVal(f);
-      if(val==='—')return;
-      const row=document.createElement('div');row.className='summary-row';
-      row.innerHTML=`<span class="summary-key">${f.label}</span><span class="summary-val">${val}</span>`;
-      card.appendChild(row);
-    });
-    if(card.children.length>1)sv.appendChild(card);
+    card.innerHTML=`<div class="summary-sec-title">${sec.icon} ${sec.title}</div>`+rows;
+    sv.appendChild(card);
   });
+  if(!hasContent){
+    const em=document.createElement('div');em.className='empty-state';
+    em.innerHTML='<div class="empty-state-icon">📋</div><div>Aucune réponse enregistrée.<br>Remplissez le formulaire d\'abord.</div>';
+    sv.appendChild(em);
+  }
   const btn=document.createElement('button');
-  btn.className='btn btn-primary';
-  btn.style.cssText='width:100%;margin-top:4px;margin-bottom:16px';
-  btn.innerHTML='<i class="ti ti-file-download" aria-hidden="true"></i> Générer le PDF';
+  btn.className='generate-btn';
+  btn.innerHTML='&#8659; Générer et télécharger le PDF';
   btn.onclick=exportPDF;
   sv.appendChild(btn);
 }
 
 function exportPDF(){
-  const company=getValue('company_name')||'Client';
+  const company=get('company_name')||'Client';
   const date=new Date().toLocaleDateString('fr-FR');
-  let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Cahier des charges — ${company}</title>
-<style>
-body{font-family:Arial,sans-serif;font-size:12px;color:#111;max-width:700px;margin:0 auto;padding:24px}
-h1{font-size:20px;border-bottom:2px solid #185FA5;padding-bottom:8px;color:#185FA5;margin-bottom:4px}
-.meta{font-size:11px;color:#666;margin-bottom:24px}
-h2{font-size:14px;background:#E6F1FB;color:#185FA5;padding:8px 12px;margin:20px 0 6px;border-left:4px solid #185FA5}
-table{width:100%;border-collapse:collapse;margin-bottom:8px}
-td{padding:6px 10px;border-bottom:1px solid #eee;font-size:12px;vertical-align:top}
-td:first-child{color:#555;width:45%;font-weight:500}
-td:last-child{color:#111}
-.footer{margin-top:32px;padding-top:12px;border-top:1px solid #ddd;font-size:10px;color:#999;text-align:center}
-</style></head><body>
-<h1>Cahier des charges — ${company}</h1>
-<div class="meta">Généré le ${date} — Formulaire de recueil des besoins</div>`;
+  let rows='';
   SECTIONS.forEach(sec=>{
-    let rows='';
-    sec.fields.forEach(f=>{
-      const val=getDisplayVal(f);
-      if(val!=='—')rows+=`<tr><td>${f.label}</td><td>${val.replace(/\n/g,'<br>')}</td></tr>`;
-    });
-    if(rows)html+=`<h2>${sec.title}</h2><table>${rows}</table>`;
+    let secRows='';
+    sec.fields.forEach(f=>{const v=disp(f);if(v)secRows+=`<tr><td>${f.label}</td><td>${v.replace(/\n/g,'<br>')}</td></tr>`;});
+    if(secRows)rows+=`<tr class="sec-header"><td colspan="2">${sec.icon} ${sec.title}</td></tr>${secRows}`;
   });
-  html+=`<div class="footer">Cahier des charges généré automatiquement — confidentiel</div></body></html>`;
-  const blob=new Blob([html],{type:'text/html'});
+  const html=`<!DOCTYPE html>
+<html lang="fr"><head><meta charset="UTF-8">
+<title>Cahier des charges — ${company}</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#1a1a2e;background:#fff;padding:0}
+.cover{background:linear-gradient(135deg,#0f1117 0%,#1a1d27 100%);color:white;padding:48px 40px;margin-bottom:0}
+.cover-title{font-size:28px;font-weight:700;margin-bottom:6px;letter-spacing:-0.5px}
+.cover-sub{font-size:14px;opacity:0.7;margin-bottom:24px}
+.cover-meta{display:flex;gap:24px;font-size:12px;opacity:0.6}
+.content{padding:24px 32px}
+table{width:100%;border-collapse:collapse;margin-bottom:4px}
+.sec-header td{background:#1a1d27;color:white;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;padding:9px 14px;margin-top:20px}
+tr:not(.sec-header){border-bottom:1px solid #eef0f5}
+tr:not(.sec-header):last-child{border-bottom:2px solid #eef0f5;margin-bottom:16px}
+td{padding:7px 14px;vertical-align:top;font-size:12px}
+td:first-child{color:#555;width:42%;font-weight:500;background:#f8f9fc}
+td:last-child{color:#1a1a2e;font-weight:500}
+.footer{margin-top:32px;padding:14px 32px;border-top:1px solid #eee;font-size:10px;color:#999;display:flex;justify-content:space-between}
+@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact}}
+</style>
+</head><body>
+<div class="cover">
+  <div class="cover-title">Cahier des charges</div>
+  <div class="cover-sub">${company}</div>
+  <div class="cover-meta">
+    <span>&#128197; Généré le ${date}</span>
+    <span>&#128202; ${SECTIONS.length} sections analysées</span>
+  </div>
+</div>
+<div class="content">
+<table>${rows}</table>
+</div>
+<div class="footer">
+  <span>Cahier des charges — ${company}</span>
+  <span>Document confidentiel — ${date}</span>
+</div>
+</body></html>`;
+  const blob=new Blob([html],{type:'text/html;charset=utf-8'});
   const url=URL.createObjectURL(blob);
   const a=document.createElement('a');
   a.href=url;
-  a.download='cahier-des-charges-'+company.replace(/\s+/g,'-').toLowerCase()+'-'+date.replace(/\//g,'-')+'.html';
+  a.download='cahier-des-charges-'+company.replace(/[^a-zA-Z0-9]/g,'-').toLowerCase()+'.html';
+  document.body.appendChild(a);
   a.click();
-  URL.revokeObjectURL(url);
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},1000);
 }
 
-loadFromStorage();
+load();
 renderForm();
 updateProgress();
-if(formData&&Object.keys(formData).length>0){
-  const d=new Date();
-  document.getElementById('saved-indicator').textContent='Chargé depuis la sauvegarde';
+if(Object.keys(formData).length>0){
+  document.getElementById('saved-badge').textContent='Chargé &#10003;';
 }
 </script>
+</body>
+</html>
